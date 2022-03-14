@@ -1,13 +1,7 @@
-2022-02-24
-
-* Updated duck_hunt_main.py and solution.py to pass `current_frame` as `env.render()` cannot be used since PyGame is not thread-safe
-* Updated duck_hunt_main.ipynb for solution.py change and, added threaded-version cell with an example on how to save a gif, fixed bug where the loop get running once the pygame had finished, moved the `env` creation inside of the game loop cell to avoid "no video device" pygame error.
-
-
 2022-02-12:  
 
 *  Updated to version 1.2 with bug fix for relative move_type and platform-independent versions with optimizations removed added. 
-* Updated duck_hunt_main.py that didn't have env.render() inside the main loop, but when using "-m manual".
+* Updated duck_hunt_main.py that didn't have env.render() inside the main loop.
 * Updated requirements.txt to include package sometimes not installed that is required.
 
 To create a virtual environment with virtenv and python 3.7 in the current directory:
