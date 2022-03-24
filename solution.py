@@ -2,15 +2,16 @@ import time
 import tensorflow as tf
 import cv2
 import matplotlib
+matplotlib.use('Agg')
 import matplotlib.pyplot as plt
 import numpy as np
-from object_detection.utils import visualization_utils as viz_utils
-from object_detection.utils import label_map_util
 import os
 
-# import shutil
-# shutil.rmtree("./fig")
-# os.mkdir("fig")
+
+import shutil
+if os.path.exists("./fig"):
+    shutil.rmtree("./fig")
+os.mkdir("fig")
 
 """
 Replace following with your own algorithm logic
@@ -95,18 +96,14 @@ def GetLocation(move_type, env, current_frame):
     y1 = int(current_frame.shape[0]*shoot_box[0])
     y2 = int(current_frame.shape[0]*shoot_box[2])
 
-    print("coordinates preflip", x1, x2, y1, y2)
-
     shoot_score = scores[max_score_idx]
 
-    if(shoot_score < 0.3):
+    if(shoot_score < 0.2):
+        print(f"NOOP - score: {shoot_score}")
         return [{'coordinate': 8, 'move_type': 'relative'}]
 
     shoot_x = ((x1+x2)//2)
     shoot_y = ((y1+y2)//2)
-
-    print("shoot_x", shoot_x)
-    print("shoot_y", shoot_y)
 
     # Use relative coordinates to the current position of the "gun", defined as an integer below
     if move_type == "relative":
