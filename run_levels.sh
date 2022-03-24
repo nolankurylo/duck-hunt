@@ -7,7 +7,7 @@
 duration=60
 for x in `seq 1 819`; do 
     #Run level $x
-    python duck_hunt_main.py -l $x -d $duration; 
+    python duck_hunt_main.py -m "absolute" -l $x -d $duration; 
     #Get error code
     rc=$?; 
     if [ $rc -ne 0 ]; then
