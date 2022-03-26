@@ -31,35 +31,19 @@ def GetLocation(move_type, env, current_frame):
     detections = model.make_prediction(current_frame)
     
 
-    utils.plot_frame(current_frame.copy(), detections.copy())
+    # utils.plot_frame(current_frame.copy(), detections.copy())
 
     scores = np.array(detections['detection_scores'])
     boxes = np.array(detections['detection_boxes'])
 
-    max_score_idx = np.argmax(scores)
-
-    shoot_box = boxes[max_score_idx]
-    shoot_score = scores[max_score_idx]
-    
-    if(shoot_score < 0.3):
+    current_ducks = model.get_valid_duck_coords(scores,boxes,current_frame)
+    if len(current_ducks) == 0:
+        model.prev_detections = current_ducks
         print('no ducks')
         return [{'coordinate': 8, 'move_type': 'relative'}]
 
-    x1 = int(current_frame.shape[1]*shoot_box[1])
-    x2 = int(current_frame.shape[1]*shoot_box[3])
-    y1 = int(current_frame.shape[0]*shoot_box[0])
-    y2 = int(current_frame.shape[0]*shoot_box[2])
-
-    shoot_x = ((x1+x2)//2)
-    shoot_y = ((y1+y2)//2)
-
-    new_coords = model.get_shot_prediction([(shoot_y,shoot_x)])
-    print('predicted shot: ')
-    print(new_coords)
-
-
-
-
+    
+    new_coords = model.get_shot_prediction(current_ducks)
 
     # Use relative coordinates to the current position of the "gun", defined as an integer below
     if move_type == "relative":
@@ -83,11 +67,15 @@ def GetLocation(move_type, env, current_frame):
         Bottom right = (W, H) 
         """
         # coordinate = env.action_space_abs.sample()
-        model.prev_detections = [(shoot_y,shoot_x)]
-        if new_coords:
-            coordinate = new_coords[0]
+        model.prev_detections = current_ducks
+        
+        if len(new_coords) > 0:
+            print("shots")
+            print(new_coords)
+            return new_coords
         else:
             return [{'coordinate': 8, 'move_type': 'relative'}]
         
 
     return [{'coordinate': coordinate, 'move_type': move_type}]
+

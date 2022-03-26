@@ -39,10 +39,6 @@ class Model:
         shoot_coords = []
         if not self.prev_detections:
             return shoot_coords
-        print('prev points')
-        print(self.prev_detections)
-        print('current points')
-        print(curr_detections)
         
         for prev_duck in self.prev_detections:
             #find closest duck
@@ -54,19 +50,32 @@ class Model:
                     min_dist = new_dist
                     min_coords = (curr_duck[0],curr_duck[1])
                 elif (new_dist < min_dist):
-                    min_dist = prev_dist
+                    min_dist = new_dist
                     min_coords = (curr_duck[0],curr_duck[1])
-            
-            if min_dist > : 
-                return shoot_coords
+            # print('Duck matching')
+            # print(prev_duck)
+            # print(min_coords)
             #find dx and dy
             dy =  min_coords[0] - prev_duck[0]
             dx =  min_coords[1] - prev_duck[1]
             # prediction strength
             p = 1
-            shoot_coords.append((min_coords[0]+p*dy,min_coords[1]+p*dx))
+            #dy min_coords[0]+p*dy
+            coordinate = (min_coords[0]+p*dy,min_coords[1]+p*dx)
+            shoot_coords.append({'coordinate': coordinate, 'move_type': 'absolute'})
         return shoot_coords
             
                 
-#     #First find closest duck
-#       euclidean_distance = np.sqrt((prev_duck))
+    def get_valid_duck_coords(self,scores,boxes,frame):
+        threshold = 0.3
+        coords = []
+        for i in range(0,len(scores)):
+
+            curr_box = boxes[i]
+            if scores[i] > threshold:          
+                x1 = int(frame.shape[1]*boxes[i][1])
+                x2 = int(frame.shape[1]*boxes[i][3])
+                y1 = int(frame.shape[0]*boxes[i][0])
+                y2 = int(frame.shape[0]*boxes[i][2])
+                coords.append((((y1+y2)//2),((x1+x2)//2)))
+        return coords
