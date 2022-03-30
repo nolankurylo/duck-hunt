@@ -32,9 +32,14 @@ def GetLocation(move_type, env, current_frame):
     
 
     # utils.plot_frame(current_frame.copy(), detections.copy())
-
+    # print(detections.keys())
     scores = np.array(detections['detection_scores'])
     boxes = np.array(detections['detection_boxes'])
+    classes = np.array(detections['detection_classes'])
+
+    scores = scores[np.where(classes == 2)]
+    boxes = boxes[np.where(classes == 2)]
+    
 
     current_ducks = model.get_valid_duck_coords(scores,boxes,current_frame)
     if len(current_ducks) == 0:

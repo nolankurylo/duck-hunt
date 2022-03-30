@@ -5,7 +5,7 @@
 # use a script to run each level in a loop
 
 duration=60
-for x in `seq 100 200`; do 
+for x in `seq 500 900`; do 
     #Run level $x
     python duck_hunt_main.py -m "absolute" -l $x -d $duration; 
     #Get error code
