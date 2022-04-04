@@ -14,6 +14,7 @@ class Model:
         """ Makes a prediction using the saved model fine tuned from SSD Mobilenet
         :param current_frame: (1024,768,3) RGB image
         :return detections dict
+        References: Tensorflow
         """
         input_tensor = tf.convert_to_tensor(current_frame)[tf.newaxis, ...]
         start_time = time.time()
@@ -28,6 +29,7 @@ class Model:
     def test_prediction(self):
         """ Initializes the model
         :return None
+        References: Tensorflow
         """
         test_image = np.ones(shape=(1024,768,3))
         input_tensor = tf.convert_to_tensor(test_image, tf.uint8)[tf.newaxis, ...]
