@@ -7,7 +7,7 @@ import os
 class Model:
     def __init__(self):
         self.prev_detections = []
-        self.predict = tf.saved_model.load("./trained_models/resnet/saved_model")
+        self.predict = tf.saved_model.load("./trained_models/mobilenet/saved_model")
         self.test_prediction()
     
     def make_prediction(self, current_frame):
@@ -35,8 +35,8 @@ class Model:
         print("MODEL READY!!!")
     
     def get_shot_prediction(self,curr_detections):
-         """ Matches the closest duck from the previous frame to determine how much distance elapsed,
-         add that amount of distane in the direction it was going to "guess" where it will be in the next frame
+        """ Matches the closest duck from the previous frame to determine how much distance elapsed,
+        add that amount of distane in the direction it was going to "guess" where it will be in the next frame
         :param curr_detections: current frames's detections
         :return shoot_coords dict
         """
@@ -67,7 +67,7 @@ class Model:
             
                 
     def get_valid_duck_coords(self,scores,boxes,frame):
-         """ Returns list of (x,y) coordinates from current frame detected by the model above a specified threshold
+        """ Returns list of (x,y) coordinates from current frame detected by the model above a specified threshold
         :param scores: current frames's detection scores
         :param boxes: current frames's detection boxes
         :param frame: current frame
