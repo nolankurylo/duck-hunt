@@ -1,23 +1,45 @@
-2022-02-24
-
-* Updated duck_hunt_main.py and solution.py to pass `current_frame` as `env.render()` cannot be used since PyGame is not thread-safe
-* Updated duck_hunt_main.ipynb for solution.py change and, added threaded-version cell with an example on how to save a gif, fixed bug where the loop get running once the pygame had finished, moved the `env` creation inside of the game loop cell to avoid "no video device" pygame error.
-
-
-2022-02-12:  
-
-*  Updated to version 1.2 with bug fix for relative move_type and platform-independent versions with optimizations removed added. 
-* Updated duck_hunt_main.py that didn't have env.render() inside the main loop, but when using "-m manual".
-* Updated requirements.txt to include package sometimes not installed that is required.
-
-To create a virtual environment with virtenv and python 3.7 in the current directory:
-
-$ bash setup_venv.sh <name of your environment>
-
-To run a checksum to verify the wheel:
-
-$ ./checksum ece471_duckhunt-1.2.0-cp37-cp37m-linux_x86_64.whl 314e43a5753f75710a114dd9d8f8973bde3d82944e0610e7fe631dcbd589e948 
-$ ./checksum ece471_duckhunt-1.2.0-py3-none-any.whl 76e91ded64faf39deb63d4c9822531ffdf5ddea54bdfb118379409e91000549f 
+# Duck Hunt Challenge
+This repository provides a solution for the game, Duck Hunt, via an AI to act as an "aim bot". The solution uses fine-tuning of SSD-MobileNet and SSD-Resnet50 with our a custom dataset of ducks and dead ducks across various levels. 
+<br>
+Note - our code is in solution.py and in two Python packages called model and utils. Also the fine-tuned
+models (resnet and mobilenet) are in trained_models, the model training occured in duck_hunt_training.ipynb on Google Colab 
+## Setup
+1. `./setup_venv.sh venv` or `python3.7 -m pip install -r requirements.txt`
+2. Ensure ece471_duckhunt package is installed -> we had ours running on MacOS: `ece471_duckhunt-1.2.0-py3-none-any.whl`
+3. Activate the virtual environment: `source venv/bin/activate`
+3. Run the game thru `./run_levels.sh` or `python duck_hunt_main.py -m "absolute" -l $x -d $duration` 
 
 
-Sometimes, Pygame will freeze when running +200 levels sequentially with quiet=False.  To avoid this, run each level independently.  An example of this can be found in run_test.sh 
+## Demonstration - Transfer Learning of SSD MobileNet
+### Note - Multiple ducks can be shot at once, cross hair may only move to one or not at all in each frame
+#### Level 1
+<img src="./static/solutionlevel1.gif" width="500" height="350" />
+<br>
+<br>
+
+#### Level 5
+<img src="./static/solutionlevel5.gif" width="500" height="350" />
+<br>
+<br>
+
+#### Level 10
+<img src="./static/solutionlevel10.gif" width="500" height="350" />
+
+
+
+## References
+
+Martín Abadi, Ashish Agarwal, Paul Barham, Eugene Brevdo,
+Zhifeng Chen, Craig Citro, Greg S. Corrado, Andy Davis,
+Jeffrey Dean, Matthieu Devin, Sanjay Ghemawat, Ian Goodfellow,
+Andrew Harp, Geoffrey Irving, Michael Isard, Rafal Jozefowicz, Yangqing Jia,
+Lukasz Kaiser, Manjunath Kudlur, Josh Levenberg, Dan Mané, Mike Schuster,
+Rajat Monga, Sherry Moore, Derek Murray, Chris Olah, Jonathon Shlens,
+Benoit Steiner, Ilya Sutskever, Kunal Talwar, Paul Tucker,
+Vincent Vanhoucke, Vijay Vasudevan, Fernanda Viégas,
+Oriol Vinyals, Pete Warden, Martin Wattenberg, Martin Wicke,
+Yuan Yu, and Xiaoqiang Zheng.
+TensorFlow: Large-scale machine learning on heterogeneous systems,
+2015. Software available from tensorflow.org.
+
+

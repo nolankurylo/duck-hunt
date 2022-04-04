@@ -1,9 +1,0 @@
-To run our Code in solution.py -> 
-1. ./setup_venv.sh venv
-2. Ensure ece471_duckhunt package is insalled -> we had ours running on MacOS: ece471_duckhunt-1.2.0-py3-none-any.whl
-3. Run the game thru ./run_levels.sh or python duck_hunt_main.py -m "absolute" -l $x -d $duration 
-
-
-Note - our code is in solution.py and in two Python packages called model and utils. Also the fine-tuned
-models (resnet and mobilenet) are in trained_models, the model training occured in duck_hunt_training.ipynb on
-Google Colab 
