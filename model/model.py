@@ -61,14 +61,19 @@ class Model:
             dx =  min_coords[1] - prev_duck[1]
             # prediction strength
             p = 1
-            #dy min_coords[0]+p*dy
             coordinate = (min_coords[0]+p*dy,min_coords[1]+p*dx)
             shoot_coords.append({'coordinate': coordinate, 'move_type': 'absolute'})
         return shoot_coords
             
                 
     def get_valid_duck_coords(self,scores,boxes,frame):
-        threshold = 0.25
+         """ Returns list of (x,y) coordinates from current frame detected by the model above a specified threshold
+        :param scores: current frames's detection scores
+        :param boxes: current frames's detection boxes
+        :param frame: current frame
+        :return coords list of (x,y) tuples
+        """
+        threshold = 0.3
         coords = []
         for i in range(0,len(scores)):
 
