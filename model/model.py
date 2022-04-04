@@ -7,7 +7,7 @@ import os
 class Model:
     def __init__(self):
         self.prev_detections = []
-        self.predict = tf.saved_model.load("./inference/saved_model")
+        self.predict = tf.saved_model.load("./trained_models/resnet/saved_model")
         self.test_prediction()
     
     def make_prediction(self, current_frame):
@@ -15,7 +15,6 @@ class Model:
         :param current_frame: (1024,768,3) RGB image
         :return detections dict
         """
-        
         input_tensor = tf.convert_to_tensor(current_frame)[tf.newaxis, ...]
         start_time = time.time()
         detections = self.predict(input_tensor)
@@ -36,6 +35,11 @@ class Model:
         print("MODEL READY!!!")
     
     def get_shot_prediction(self,curr_detections):
+         """ Matches the closest duck from the previous frame to determine how much distance elapsed,
+         add that amount of distane in the direction it was going to "guess" where it will be in the next frame
+        :param curr_detections: current frames's detections
+        :return shoot_coords dict
+        """
         shoot_coords = []
         if not self.prev_detections:
             return shoot_coords
@@ -52,9 +56,6 @@ class Model:
                 elif (new_dist < min_dist):
                     min_dist = new_dist
                     min_coords = (curr_duck[0],curr_duck[1])
-            # print('Duck matching')
-            # print(prev_duck)
-            # print(min_coords)
             #find dx and dy
             dy =  min_coords[0] - prev_duck[0]
             dx =  min_coords[1] - prev_duck[1]
@@ -67,7 +68,7 @@ class Model:
             
                 
     def get_valid_duck_coords(self,scores,boxes,frame):
-        threshold = 0.3
+        threshold = 0.25
         coords = []
         for i in range(0,len(scores)):
 

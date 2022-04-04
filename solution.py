@@ -15,36 +15,26 @@ utils = Utils()
 
 """
 Replace following with your own algorithm logic
-
-Two random coordinat
-# min_
-# def predictnext_coords()prev_duck,current_ducks:
-#     #First find closest duck
-    
 """
-
 
 def GetLocation(move_type, env, current_frame):
 
     time.sleep(1)  # artificial one second processing time
 
     detections = model.make_prediction(current_frame)
-    
 
     # utils.plot_frame(current_frame.copy(), detections.copy())
-    # print(detections.keys())
+
     scores = np.array(detections['detection_scores'])
     boxes = np.array(detections['detection_boxes'])
     classes = np.array(detections['detection_classes'])
 
     scores = scores[np.where(classes == 2)]
-    boxes = boxes[np.where(classes == 2)]
-    
+    boxes = boxes[np.where(classes == 2)]    
 
     current_ducks = model.get_valid_duck_coords(scores,boxes,current_frame)
     if len(current_ducks) == 0:
         model.prev_detections = current_ducks
-        print('no ducks')
         return [{'coordinate': 8, 'move_type': 'relative'}]
 
     
@@ -64,6 +54,7 @@ def GetLocation(move_type, env, current_frame):
         NOOP = 8
         """
         coordinate = env.action_space.sample()
+        
         # Use absolute coordinates for the position of the "gun", coordinate space are defined below
     else:
         """
@@ -75,8 +66,6 @@ def GetLocation(move_type, env, current_frame):
         model.prev_detections = current_ducks
         
         if len(new_coords) > 0:
-            print("shots")
-            print(new_coords)
             return new_coords
         else:
             return [{'coordinate': 8, 'move_type': 'relative'}]

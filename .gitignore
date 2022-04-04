@@ -133,3 +133,6 @@ dmypy.json
 
 data/
 *.Identifier
+
+inference/
+resnet/
