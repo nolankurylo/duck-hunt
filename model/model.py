@@ -19,7 +19,7 @@ class Model:
         start_time = time.time()
         detections = self.predict(input_tensor)
         end_time = time.time()
-        print(f"Total inference time {end_time - start_time}")
+        # print(f"Total inference time {end_time - start_time}")
         num_detections = int(detections.pop('num_detections'))
         detections = {key: value[0, :num_detections].numpy() for key, value in detections.items()}
         detections['num_detections'] = num_detections
