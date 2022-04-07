@@ -6,10 +6,12 @@ matplotlib.use('Agg')
 import matplotlib.pyplot as plt
 import numpy as np
 import os
-from model import Model
+from modelUtils import ModelUtils
 from utils import Utils
 
-model = Model()
+
+MODEL_TYPE = 'mobilenet' # resnet or mobilenet
+model = ModelUtils(model_type=MODEL_TYPE)
 utils = Utils()
 
 
@@ -21,24 +23,26 @@ def GetLocation(move_type, env, current_frame):
 
     time.sleep(1)  # artificial one second processing time
 
-    detections = model.make_prediction(current_frame)
+    if MODEL_TYPE == 'yolo':
+        current_ducks = model.yolo_predict(current_frame)
+    else:
+        detections = model.ssd_predict(current_frame)
+        scores = np.array(detections['detection_scores'])
+        boxes = np.array(detections['detection_boxes'])
+        classes = np.array(detections['detection_classes'])
 
-    # utils.plot_frame(current_frame.copy(), detections.copy())
+        scores = scores[np.where(classes == 2)]
+        boxes = boxes[np.where(classes == 2)]    
 
-    scores = np.array(detections['detection_scores'])
-    boxes = np.array(detections['detection_boxes'])
-    classes = np.array(detections['detection_classes'])
+        current_ducks = model.get_valid_duck_coords(scores,boxes,current_frame)
 
-    scores = scores[np.where(classes == 2)]
-    boxes = boxes[np.where(classes == 2)]    
-
-    current_ducks = model.get_valid_duck_coords(scores,boxes,current_frame)
     if len(current_ducks) == 0:
         model.prev_detections = current_ducks
         return [{'coordinate': 8, 'move_type': 'relative'}]
 
     
     new_coords = model.get_shot_prediction(current_ducks)
+    
 
     # Use relative coordinates to the current position of the "gun", defined as an integer below
     if move_type == "relative":
@@ -62,7 +66,6 @@ def GetLocation(move_type, env, current_frame):
         Upper left = (0,0)
         Bottom right = (W, H) 
         """
-        # coordinate = env.action_space_abs.sample()
         model.prev_detections = current_ducks
         
         if len(new_coords) > 0:

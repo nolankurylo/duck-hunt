@@ -3,14 +3,37 @@ import tensorflow as tf
 import time
 import cv2
 import os
+import torch
 
-class Model:
-    def __init__(self):
+class ModelUtils:
+    def __init__(self, model_type='mobilenet'):
         self.prev_detections = []
-        self.predict = tf.saved_model.load("./trained_models/mobilenet/saved_model")
-        self.test_prediction()
-    
-    def make_prediction(self, current_frame):
+        if model_type == 'yolo': 
+            self.predict = torch.hub.load('ultralytics/yolov5', 'custom', path='./trained_models/yolov5_weights.pt')
+        else:
+            self.predict = tf.saved_model.load(f"./trained_models/{model_type}/saved_model")
+        self.test_prediction(model_type)
+
+    def yolo_predict(self, current_frame):
+        """ Makes a prediction using the saved model fine tuned from YoloV5
+        :param current_frame: (1024,768,3) RGB image
+        :return detections dict
+        References: Tensorflow
+        """
+        start_time = time.time()
+        detections = self.predict(current_frame)
+        end_time = time.time()
+        print(f"Total inference time {end_time - start_time}")
+
+        coords = []
+        for i in range(detections.xyxy[0].shape[0]):
+            pred = detections.pandas().xyxy[0].iloc[i]
+            if pred['confidence'] < 0.25 or pred['name'] == 'deadduck':
+                continue
+            coords.append((((pred['ymin']+pred['ymax'])//2),((pred['xmin']+pred['xmax'])//2)))
+        return coords
+
+    def ssd_predict(self, current_frame):
         """ Makes a prediction using the saved model fine tuned from SSD Mobilenet
         :param current_frame: (1024,768,3) RGB image
         :return detections dict
@@ -26,15 +49,19 @@ class Model:
         detections['num_detections'] = num_detections
         return detections
 
-    def test_prediction(self):
+    def test_prediction(self, model_type):
         """ Initializes the model
         :return None
         References: Tensorflow
         """
+        
         test_image = np.ones(shape=(1024,768,3))
-        input_tensor = tf.convert_to_tensor(test_image, tf.uint8)[tf.newaxis, ...]
-        detections = self.predict(input_tensor)
-        print("MODEL READY!!!")
+        if model_type == 'yolo':
+            detections = self.predict(test_image)
+        else:
+            input_tensor = tf.convert_to_tensor(test_image, tf.uint8)[tf.newaxis, ...]
+            detections = self.predict(input_tensor)
+        print(f"{model_type} READY!!!")
     
     def get_shot_prediction(self,curr_detections):
         """ Matches the closest duck from the previous frame to determine how much distance elapsed,
