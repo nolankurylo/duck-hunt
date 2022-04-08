@@ -1,5 +1,5 @@
 # Duck Hunt Challenge
-This repository provides a solution for the game, Duck Hunt, via an AI to act as an "aim bot". The solution uses fine-tuning of SSD-MobileNet and SSD-Resnet50 with our a custom dataset of ducks and dead ducks across various levels. 
+This repository provides a solution for the game, Duck Hunt, via an AI to act as an "aim bot". The solution uses fine-tuning of SSD-MobileNet and SSD-Resnet50, and YOLOv5 with our a 2-class custom dataset of ducks and dead ducks across various levels. 
 <br>
 Note - our code is in solution.py and in two Python packages called model and utils. Also the fine-tuned
 models (resnet and mobilenet) are in trained_models, the model training occured in duck_hunt_training.ipynb on Google Colab 
