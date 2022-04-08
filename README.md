@@ -12,18 +12,18 @@ models (resnet and mobilenet) are in trained_models, the model training occured 
 
 ## Demonstration - Transfer Learning of SSD MobileNet
 ### Note - Multiple ducks can be shot at once, cross hair may only move to one or not at all in each frame
-#### Level 1
-<img src="./static/solutionlevel1.gif" width="500" height="350" />
+#### Level 100
+<img src="./static/solutionlevel100.gif" width="500" height="350" />
 <br>
 <br>
 
 #### Level 5
-<img src="./static/solutionlevel5.gif" width="500" height="350" />
+<img src="./static/solutionlevel700.gif" width="500" height="350" />
 <br>
 <br>
 
 #### Level 10
-<img src="./static/solutionlevel10.gif" width="500" height="350" />
+<img src="./static/solutionlevel800.gif" width="500" height="350" />
 
 ## Dataset
 https://drive.google.com/drive/folders/17RMRdD8wjiRORFZ305xa9aumtHna3WlT?usp=sharing

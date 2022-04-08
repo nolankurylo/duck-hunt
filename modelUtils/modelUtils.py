@@ -23,12 +23,12 @@ class ModelUtils:
         start_time = time.time()
         detections = self.predict(current_frame)
         end_time = time.time()
-        print(f"Total inference time {end_time - start_time}")
+        # print(f"Total inference time {end_time - start_time}")
 
         coords = []
         for i in range(detections.xyxy[0].shape[0]):
             pred = detections.pandas().xyxy[0].iloc[i]
-            if pred['confidence'] < 0.25 or pred['name'] == 'deadduck':
+            if pred['confidence'] < 0.3 or pred['name'] == 'deadduck':
                 continue
             coords.append((((pred['ymin']+pred['ymax'])//2),((pred['xmin']+pred['xmax'])//2)))
         return coords

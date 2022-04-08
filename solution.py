@@ -7,12 +7,13 @@ import matplotlib.pyplot as plt
 import numpy as np
 import os
 from modelUtils import ModelUtils
-from utils import Utils
+from plotter import Plotter
 
+MODEL_TYPE = 'yolo' # resnet | mobilenet | yolo
+USE_FRAME_DISPLACE_ALGO = False
 
-MODEL_TYPE = 'mobilenet' # resnet or mobilenet
 model = ModelUtils(model_type=MODEL_TYPE)
-utils = Utils()
+plotter = Plotter()
 
 
 """
@@ -40,8 +41,13 @@ def GetLocation(move_type, env, current_frame):
         model.prev_detections = current_ducks
         return [{'coordinate': 8, 'move_type': 'relative'}]
 
-    
-    new_coords = model.get_shot_prediction(current_ducks)
+    if USE_FRAME_DISPLACE_ALGO:
+        new_coords = model.get_shot_prediction(current_ducks)
+    else:
+        new_coords = []
+        for duck in current_ducks:
+            new_coords.append({'coordinate': duck, 'move_type': 'absolute'})
+
     
 
     # Use relative coordinates to the current position of the "gun", defined as an integer below
@@ -58,6 +64,7 @@ def GetLocation(move_type, env, current_frame):
         NOOP = 8
         """
         coordinate = env.action_space.sample()
+        return [{'coordinate': coordinate, 'move_type': move_type}]
         
         # Use absolute coordinates for the position of the "gun", coordinate space are defined below
     else:
@@ -73,6 +80,4 @@ def GetLocation(move_type, env, current_frame):
         else:
             return [{'coordinate': 8, 'move_type': 'relative'}]
         
-
-    return [{'coordinate': coordinate, 'move_type': move_type}]
 
