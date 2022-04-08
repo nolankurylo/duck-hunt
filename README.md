@@ -17,12 +17,12 @@ models (resnet and mobilenet) are in trained_models, the model training occured 
 <br>
 <br>
 
-#### Level 5
+#### Level 700
 <img src="./static/solutionlevel700.gif" width="500" height="350" />
 <br>
 <br>
 
-#### Level 10
+#### Level 800
 <img src="./static/solutionlevel800.gif" width="500" height="350" />
 
 ## Dataset
